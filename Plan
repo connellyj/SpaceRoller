@@ -44,4 +44,4 @@ Art Elements:
 
 Schedule of Work:
 	Julia:
-		10/17/2016 - Initial PlayerController, CameraController, and arbitrary path maker
+		10/17/2016 - Initial PlayerController, CameraController, and arbitrary path maker, also the initial meteor prefab
