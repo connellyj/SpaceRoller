@@ -40,3 +40,8 @@ Art Elements:
 	polish
 		sound effects
 		meteor texture
+
+
+Schedule of Work:
+	Julia:
+		10/17/2016 - Initial PlayerController, CameraController, and arbitrary path maker
