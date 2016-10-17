@@ -1,0 +1,42 @@
+3D Ball Rolling Game
+
+Before Thursday:
+
+	Julia
+		player
+		camera
+		movement scripts
+		meteors
+
+		game manager
+		player death
+		checkpoints
+
+	Connor
+		basic platforms
+		ramps
+		falling platforms
+		black holes
+		speed ups
+
+		pause menu
+		start menu
+		end menu
+
+
+After Thursday:
+
+	Level design
+
+
+
+Art Elements:
+
+	required
+		planet texture
+		star skybox
+		black hole particle system
+
+	polish
+		sound effects
+		meteor texture
