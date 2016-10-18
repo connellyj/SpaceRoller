@@ -3,10 +3,10 @@
 Before Thursday:
 
 	Julia
-		player
-		camera
-		movement scripts
-		meteors
+		XX player
+		XX camera
+		XX movement scripts
+		XX meteors
 
 		game manager
 		player death
@@ -45,3 +45,4 @@ Art Elements:
 Schedule of Work:
 	Julia:
 		10/17/2016 - Initial PlayerController, CameraController, GameManager, and arbitrary path maker, also the initial meteor prefab
+        10/18/2016 - Added more to the GameManager, created StartScreenController, refactored and commented all current scripts
