@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate() {
         // Gets the camera's front and right vectors parallel to the xz-plane
         Vector3 cameraRight = Camera.main.transform.right;
-        Vector3 cameraForward = Quaternion.AngleAxis(Camera.main.transform.rotation.x * -180, cameraRight) * Camera.main.transform.forward;
+        Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
 
         // Calculates the movement vector
         Vector3 moveHorizontal = Input.GetAxis("Horizontal") * cameraRight;
