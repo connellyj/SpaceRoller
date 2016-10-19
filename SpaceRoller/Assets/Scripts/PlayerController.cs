@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+ * Controls the player
+ */
+
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 

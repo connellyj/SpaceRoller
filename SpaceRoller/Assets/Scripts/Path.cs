@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+ * A script used to create arbitrary paths easily for game objects
+ */
+
+using UnityEngine;
 using System.Collections;
 
 public class Path : MonoBehaviour {
