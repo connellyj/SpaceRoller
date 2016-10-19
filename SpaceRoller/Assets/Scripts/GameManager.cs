@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour {
 
     // Restarts the curret level
     public static void RetryLevel() {
+        instance.StopPlayerMovement();
         instance.player.transform.position = instance.spawnLocation;
     }
 
@@ -90,6 +91,12 @@ public class GameManager : MonoBehaviour {
     // Sets the location the player should respawn at
     public static void SetSpawnLocation(Vector3 newLocation) {
         instance.spawnLocation = newLocation;
+    }
+
+    void StopPlayerMovement() {
+        Rigidbody rb = instance.player.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
     }
 
     // Creates the given UI pop-up
