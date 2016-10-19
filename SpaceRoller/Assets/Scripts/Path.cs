@@ -34,25 +34,22 @@ public class Path : MonoBehaviour {
 
     // Gets the direction the object should move for the given part of the path
     Vector3 GetObjectDirection(int pathIndex, bool inReverse) {
+        int reversed;
+        if(inReverse) reversed = -1;
+        else reversed = 1;
         switch(movementMap[0, pathIndex]) {
             case "up":
-                if(inReverse) return Vector3.down;
-                return Vector3.up;
+                return Vector3.up * reversed;
             case "down":
-                if(inReverse) return Vector3.up;
-                return Vector3.down;
+                return Vector3.down * reversed;
             case "right":
-                if(inReverse) return Vector3.left;
-                return Vector3.right;
+                return Vector3.right * reversed;
             case "left":
-                if(inReverse) return Vector3.right;
-                return Vector3.left;
+                return Vector3.left * reversed;
             case "forward":
-                if(inReverse) return Vector3.back;
-                return Vector3.forward;
+                return Vector3.forward * reversed;
             case "back":
-                if(inReverse) return Vector3.forward;
-                return Vector3.back;
+                return Vector3.back * reversed;
             default:
                 Debug.Log("Incorrectly inputted person movement");
                 return Vector3.zero;

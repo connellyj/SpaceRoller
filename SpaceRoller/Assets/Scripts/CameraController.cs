@@ -2,19 +2,25 @@
 
 public class CameraController : MonoBehaviour {
 
-    public GameObject player;
-    public float speed;
-
+    float speed;
+    bool cameraInitialized = false;
+    GameObject player;
     Vector3 offset;
 
-    void Start() {
-        offset = GetOffset();
+    void LateUpdate() {
+        if(cameraInitialized) {
+            UpdateCameraPosition();
+            UpdateCameraRotation();
+            offset = GetOffset();
+        }
     }
 
-    void LateUpdate() {
-        UpdateCameraPosition();
-        UpdateCameraRotation();
+    // Passes necessary information to the camera
+    public void InitCamera(GameObject thePlayer, float speed) {
+        this.speed = speed;
+        player = thePlayer;
         offset = GetOffset();
+        cameraInitialized = true;
     }
 
     // Moves the camera with the player

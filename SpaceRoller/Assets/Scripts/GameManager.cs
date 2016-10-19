@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+    public float cameraSpeed;
+
     static GameManager instance;
 
     int currentScene;
@@ -21,19 +23,32 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
+        InitLevel();
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = 0;
     }
 
     // Called when any scene is loaded
     void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode) {
-        FindPlayer();
+        InitLevel();
+    }
+
+    void InitLevel() {
+        player = FindPlayer();
+        if(player != null) InitCamera(player, cameraSpeed);
+    }
+
+    // Sets up the camera
+    void InitCamera(GameObject thePlayer, float speed) {
+        CameraController cameraController = Camera.main.gameObject.AddComponent<CameraController>();
+        cameraController.InitCamera(thePlayer, speed);
     }
 
     // Finds the player object and sets the spawn location to its position
-    void FindPlayer() {
-        player = GameObject.FindGameObjectWithTag("Player");
-        if(player != null) SetSpawnLocation(player.transform.position);
+    GameObject FindPlayer() {
+        GameObject thePlayer = GameObject.FindGameObjectWithTag("Player");
+        if(thePlayer != null) SetSpawnLocation(thePlayer.transform.position);
+        return thePlayer;
     }
 
     // Ends the game when the player dies
