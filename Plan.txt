@@ -1,0 +1,50 @@
+3D Ball Rolling Game
+
+Before Thursday:
+
+	Julia
+		XX player
+		XX camera
+		XX movement scripts
+		XX meteors
+
+		game manager
+		XX player death
+		XX checkpoints
+
+	Connor
+		XX basic platforms
+		XX ramps
+		XX falling platforms
+		black holes
+		speed ups
+
+		pause menu
+		start menu
+		end menu
+
+
+After Thursday:
+
+	Level design
+
+
+
+Art Elements:
+
+	required
+		planet texture
+		star skybox
+		black hole particle system
+
+	polish
+		sound effects
+		meteor texture
+
+
+Schedule of Work:
+	Julia:
+		10/17/2016 - Initial PlayerController, CameraController, GameManager, 
+                        and arbitrary path maker, also the initial meteor prefab
+        10/18/2016 - Added more functionality to the GameManager, created StartScreenController
+                        and CheckpointController, refactored and commented all current scripts
