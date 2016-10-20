@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Controls the player
  */
 
@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour {
         Vector3 movement = moveVertical + moveHorizontal;
 
         // Moves the player
+
         rb.AddForce(movement * speed);
     }
+
 }
