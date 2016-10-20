@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour {
     Quaternion initialCameraRotation;
 
     void LateUpdate() {
-        if(cameraInitialized) {
+        if(cameraInitialized && !GameManager.IsGamePaused()) {
             UpdateCameraPosition();
             UpdateCameraRotation();
             offset = GetOffset();

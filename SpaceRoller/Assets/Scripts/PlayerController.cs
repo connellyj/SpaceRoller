@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        Move();
+        if(!GameManager.IsGamePaused()) Move();
     }
 
     // If the player is low enough, ends the game

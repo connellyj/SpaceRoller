@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 
     static GameManager instance;
 
+    bool paused;
     int currentScene;
     Vector3 spawnLocation;
     GameObject player;
@@ -31,6 +32,14 @@ public class GameManager : MonoBehaviour {
         InitLevel();
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = 0;
+        paused = false;
+    }
+
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            if(!paused) Pause();
+            else UnPause();
+        }
     }
 
     // Called when any scene is loaded
@@ -55,6 +64,23 @@ public class GameManager : MonoBehaviour {
         GameObject thePlayer = GameObject.FindGameObjectWithTag("Player");
         if(thePlayer != null) SetSpawnLocation(thePlayer.transform.position);
         return thePlayer;
+    }
+
+    // Pauses the game
+    public void Pause() {
+        paused = true;
+        StopPlayerMovement();
+        CreatePopUp("pause");
+    }
+
+    // Unpauses the game
+    public void UnPause() {
+        paused = false;
+    }
+
+    // Returns whether or not the game is paused
+    public static bool IsGamePaused() {
+        return instance.paused;
     }
 
     // Ends the game when the player dies
