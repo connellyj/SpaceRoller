@@ -9,12 +9,10 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public float deathHeight;
 
-    bool isPlayerDead;
     Rigidbody rb;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
-        isPlayerDead = false;
     }
 
     void Update() {
@@ -27,8 +25,7 @@ public class PlayerController : MonoBehaviour {
 
     // If the player is low enough, ends the game
     void CheckIfPlayerDied() {
-        if(transform.position.y < deathHeight && !isPlayerDead) {
-            isPlayerDead = true;
+        if(transform.position.y < deathHeight) {
             GameManager.OnPlayerDeath();
         }
     }

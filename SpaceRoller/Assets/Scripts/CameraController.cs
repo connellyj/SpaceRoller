@@ -6,16 +6,17 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
+    readonly Vector3 initialOffset = new Vector3(0, 7, -8);
+
     float speed;
     bool cameraInitialized = false;
     GameObject player;
     Vector3 offset;
-    Vector3 initialOffset;
     Vector3 initialCameraPosition;
     Quaternion initialCameraRotation;
 
     void LateUpdate() {
-        if(cameraInitialized && !GameManager.IsGamePaused()) {
+        if(cameraInitialized) {
             UpdateCameraPosition();
             UpdateCameraRotation();
             offset = GetOffset();
@@ -29,7 +30,6 @@ public class CameraController : MonoBehaviour {
 
         initialCameraPosition = transform.position;
         initialCameraRotation = transform.localRotation;
-        initialOffset = GetOffset();
         offset = initialOffset;
 
         cameraInitialized = true;

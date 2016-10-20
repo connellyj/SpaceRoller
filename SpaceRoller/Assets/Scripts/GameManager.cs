@@ -8,15 +8,20 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
     public float cameraSpeed;
+    public GameObject deathPopUp;
+    public GameObject pausePopUp;
+    public GameObject winPopUp;
 
     static GameManager instance;
 
+    bool isPlayerDead;
     bool paused;
     int currentScene;
     Vector3 spawnLocation;
     Vector3[] oldPlayerMovement;
     GameObject player;
     CameraController cameraController;
+    GameObject curPausePopUp;
 
     void Awake() {
         // Makes sure there is only one GameManager in each scene
@@ -34,6 +39,7 @@ public class GameManager : MonoBehaviour {
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = 0;
         paused = false;
+        isPlayerDead = false;
     }
 
     void Update() {
@@ -50,6 +56,7 @@ public class GameManager : MonoBehaviour {
 
     // Initializes the level
     void InitLevel() {
+        instance.isPlayerDead = false;
         player = FindPlayer();
         if(player != null) InitCamera(player, cameraSpeed);
     }
@@ -69,6 +76,7 @@ public class GameManager : MonoBehaviour {
 
     // Pauses the game
     public void Pause() {
+        Time.timeScale = 0;
         paused = true;
         oldPlayerMovement = StopPlayerMovement();
         CreatePopUp("pause");
@@ -76,8 +84,10 @@ public class GameManager : MonoBehaviour {
 
     // Unpauses the game
     public void UnPause() {
+        Time.timeScale = 1;
         paused = false;
         RestartPlayerMovement(oldPlayerMovement);
+        Destroy(curPausePopUp);
     }
 
     // Returns whether or not the game is paused
@@ -87,7 +97,10 @@ public class GameManager : MonoBehaviour {
 
     // Ends the game when the player dies
     public static void OnPlayerDeath() {
-        instance.CreatePopUp("death");
+        if(!instance.isPlayerDead) {
+            instance.isPlayerDead = true;
+            instance.CreatePopUp("death");
+        }
     }
 
     // Moves on to the next level
@@ -107,6 +120,7 @@ public class GameManager : MonoBehaviour {
         instance.StopPlayerMovement();
         instance.player.transform.position = instance.spawnLocation;
         instance.cameraController.ResetCamera();
+        instance.isPlayerDead = false;
     }
 
     // Quits the game
@@ -142,6 +156,7 @@ public class GameManager : MonoBehaviour {
         return oldSpeed;
     }
 
+    // Gives the player the given velocity
     void RestartPlayerMovement(Vector3[] movement) {
         Rigidbody rb = player.GetComponent<Rigidbody>();
         rb.velocity = movement[0];
@@ -152,10 +167,13 @@ public class GameManager : MonoBehaviour {
     void CreatePopUp(string type) {
         switch(type) {
             case "death":
+                Instantiate(deathPopUp);
                 break;
             case "pause":
+                curPausePopUp = Instantiate(pausePopUp);
                 break;
             case "win":
+                Instantiate(winPopUp);
                 break;
             default:
                 Debug.Log("That type of PopUp does not exist");

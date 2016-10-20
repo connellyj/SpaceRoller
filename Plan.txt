@@ -26,6 +26,10 @@ Before Thursday:
 
 After Thursday:
 
+    ToDo:
+        goal
+        
+
 	Level design
 
 
@@ -52,5 +56,5 @@ Schedule of Work:
                         on the x-axis, and added code to stop the player's movement on respawn
         10/20/2016 - Revamped the GameManager to actually work during level transitions, 
                         fixed the camera so it resets when retrying a level, created
-                        PopUpController to add functionality to buttons on pop-ups, and implemented
-                        pausing with the escape button
+                        PopUpController to add functionality to buttons on pop-ups, implemented
+                        pausing with the escape button, created pop-up prefabs
