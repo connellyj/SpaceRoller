@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     bool paused;
     int currentScene;
     Vector3 spawnLocation;
+    Vector3[] oldPlayerMovement;
     GameObject player;
     CameraController cameraController;
 
@@ -69,13 +70,14 @@ public class GameManager : MonoBehaviour {
     // Pauses the game
     public void Pause() {
         paused = true;
-        StopPlayerMovement();
+        oldPlayerMovement = StopPlayerMovement();
         CreatePopUp("pause");
     }
 
     // Unpauses the game
     public void UnPause() {
         paused = false;
+        RestartPlayerMovement(oldPlayerMovement);
     }
 
     // Returns whether or not the game is paused
@@ -130,10 +132,20 @@ public class GameManager : MonoBehaviour {
     }
 
     // Stops the players movement
-    void StopPlayerMovement() {
+    Vector3[] StopPlayerMovement() {
+        Vector3[] oldSpeed = new Vector3[2];
         Rigidbody rb = instance.player.GetComponent<Rigidbody>();
+        oldSpeed[0] = rb.velocity;
         rb.velocity = Vector3.zero;
+        oldSpeed[1] = rb.angularVelocity;
         rb.angularVelocity = Vector3.zero;
+        return oldSpeed;
+    }
+
+    void RestartPlayerMovement(Vector3[] movement) {
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        rb.velocity = movement[0];
+        rb.angularVelocity = movement[1];
     }
 
     // Creates the given UI pop-up
