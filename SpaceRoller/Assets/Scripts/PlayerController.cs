@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour {
 
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         // If the player is low enough, ends the game
-        if(transform.position.y < deathHeight) GameManager.OnPlayerDeath();
+        if (transform.position.y < deathHeight) GameManager.OnPlayerDeath();
     }
 
     void FixedUpdate() {
@@ -27,6 +28,8 @@ public class PlayerController : MonoBehaviour {
         Vector3 movement = moveVertical + moveHorizontal;
 
         // Moves the player
+
         rb.AddForce(movement * speed);
     }
+
 }

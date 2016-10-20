@@ -28,10 +28,7 @@ public class FallingBlock : MonoBehaviour {
 	IEnumerator Fall() 
 	{
 		// shake
-		Debug.Log("Shake");
 		fallTriggered = true;
-		//yield return new WaitForSeconds(shakeTime);
-
 		int currentFrameIndex = 0;
 		int direction = 1;
 		float shakeFrames = shakeTime * framesPerSecond;
@@ -44,7 +41,6 @@ public class FallingBlock : MonoBehaviour {
 		}
 
 		// fall
-		Debug.Log("Fall");
 		currentFrameIndex = 0;
 		float fallingFrames = fallTime * framesPerSecond;
         while (currentFrameIndex < fallingFrames)
@@ -55,7 +51,6 @@ public class FallingBlock : MonoBehaviour {
         }
 
         // return to original position
-        Debug.Log("Return");
 		transform.position = origin;
 		fallTriggered = false;
 	}
