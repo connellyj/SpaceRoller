@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     int currentScene;
     Vector3 spawnLocation;
     GameObject player;
+    CameraController cameraController;
 
     void Awake() {
         // Makes sure there is only one GameManager in each scene
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour {
         InitLevel();
     }
 
+    // Initializes the level
     void InitLevel() {
         player = FindPlayer();
         if(player != null) InitCamera(player, cameraSpeed);
@@ -44,7 +46,7 @@ public class GameManager : MonoBehaviour {
 
     // Sets up the camera
     void InitCamera(GameObject thePlayer, float speed) {
-        CameraController cameraController = Camera.main.gameObject.AddComponent<CameraController>();
+        cameraController = Camera.main.gameObject.AddComponent<CameraController>();
         cameraController.InitCamera(thePlayer, speed);
     }
 
@@ -66,10 +68,17 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(instance.currentScene);
     }
 
-    // Restarts the curret level
+    // Continues the game from the current level
+    public static void ContinueGame() {
+        if(instance.currentScene == 0) ProceedToNextLevel();
+        else SceneManager.LoadScene(instance.currentScene);
+    }
+
+    // Restarts the current level
     public static void RetryLevel() {
         instance.StopPlayerMovement();
         instance.player.transform.position = instance.spawnLocation;
+        instance.cameraController.ResetCamera();
     }
 
     // Quits the game
@@ -91,8 +100,10 @@ public class GameManager : MonoBehaviour {
     // Sets the location the player should respawn at
     public static void SetSpawnLocation(Vector3 newLocation) {
         instance.spawnLocation = newLocation;
+        if(instance.cameraController != null) instance.cameraController.SetInitialPosition(newLocation);
     }
 
+    // Stops the players movement
     void StopPlayerMovement() {
         Rigidbody rb = instance.player.GetComponent<Rigidbody>();
         rb.velocity = Vector3.zero;

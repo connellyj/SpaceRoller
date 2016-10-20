@@ -50,3 +50,6 @@ Schedule of Work:
                         and CheckpointController, refactored and commented all current scripts
         10/19/2016 - Fixed the player movement based on camera direction, added camera rotation
                         on the x-axis, and added code to stop the player's movement on respawn
+        10/20/2016 - Revamped the GameManager to actually work during level transitions, and 
+                        fixed the camera so it resets when retrying a level, created
+                        PopUpController to add functionality to buttons on pop-ups

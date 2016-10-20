@@ -8,8 +8,17 @@ using UnityEngine.UI;
 public class StartScreenController : MonoBehaviour {
 
     void Start() {
-        // Start button functionality
-        Button startButton = GameObject.FindGameObjectWithTag("StartButton").GetComponent<Button>();
-        startButton.onClick.AddListener(() => GameManager.ProceedToNextLevel());
+        foreach(Transform child in transform) {
+            switch(child.tag) {
+                case "StartButton":
+                    child.gameObject.GetComponent<Button>().onClick.AddListener(() => GameManager.ContinueGame());
+                    break;
+                case "RestartButton":
+                    child.gameObject.GetComponent<Button>().onClick.AddListener(() => GameManager.RestartGame());
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
