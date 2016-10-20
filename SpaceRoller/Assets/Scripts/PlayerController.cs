@@ -1,26 +1,42 @@
-﻿using UnityEngine;
-using System;
+/*
+ * Controls the player
+ */
+
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
     public float speed;
     public float deathHeight;
 
+    bool isPlayerDead;
     Rigidbody rb;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
+        isPlayerDead = false;
     }
 
     void Update() {
-        // If the player is low enough, ends the game
-        if (transform.position.y < deathHeight) GameManager.OnPlayerDeath();
+        CheckIfPlayerDied();
     }
 
     void FixedUpdate() {
+        if(!GameManager.IsGamePaused()) Move();
+    }
+
+    // If the player is low enough, ends the game
+    void CheckIfPlayerDied() {
+        if(transform.position.y < deathHeight && !isPlayerDead) {
+            isPlayerDead = true;
+            GameManager.OnPlayerDeath();
+        }
+    }
+
+    void Move() {
         // Gets the camera's front and right vectors parallel to the xz-plane
         Vector3 cameraRight = Camera.main.transform.right;
-        Vector3 cameraForward = Quaternion.AngleAxis(Camera.main.transform.rotation.x * -180, cameraRight) * Camera.main.transform.forward;
+        Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
 
         // Calculates the movement vector
         Vector3 moveHorizontal = Input.GetAxis("Horizontal") * cameraRight;

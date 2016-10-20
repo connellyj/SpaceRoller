@@ -1,20 +1,52 @@
-﻿using UnityEngine;
+﻿/*
+ * Controls the camera based on user input
+ */
+
+using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    public GameObject player;
-    public float speed;
-
+    float speed;
+    bool cameraInitialized = false;
+    GameObject player;
     Vector3 offset;
-
-    void Start() {
-        offset = GetOffset();
-    }
+    Vector3 initialOffset;
+    Vector3 initialCameraPosition;
+    Quaternion initialCameraRotation;
 
     void LateUpdate() {
-        UpdateCameraPosition();
-        UpdateCameraRotation();
+        if(cameraInitialized && !GameManager.IsGamePaused()) {
+            UpdateCameraPosition();
+            UpdateCameraRotation();
+            offset = GetOffset();
+        }
+    }
+
+    // Passes necessary information to the camera and initializes starting variables
+    public void InitCamera(GameObject thePlayer, float speed) {
+        this.speed = speed;
+        player = thePlayer;
+
+        initialCameraPosition = transform.position;
+        initialCameraRotation = transform.localRotation;
+        initialOffset = GetOffset();
+        offset = initialOffset;
+
+        cameraInitialized = true;
+    }
+
+    // Changes the position of the camera to the starting position
+    public void ResetCamera() {
+        cameraInitialized = false;
+        transform.position = initialCameraPosition;
+        transform.localRotation = initialCameraRotation;
         offset = GetOffset();
+        cameraInitialized = true;
+    }
+
+    // Changes the starting position of the camera (for checkpoints)
+    public void SetInitialPosition(Vector3 newPosition) {
+        initialCameraPosition = newPosition + initialOffset;
     }
 
     // Moves the camera with the player
@@ -25,14 +57,17 @@ public class CameraController : MonoBehaviour {
     // Rotates the camera based on player input
     void UpdateCameraRotation() {
         float h = 0f;
-        if(Input.GetKey(KeyCode.X)) h = -speed * Time.deltaTime;
-        if(Input.GetKey(KeyCode.Z)) h = speed * Time.deltaTime;
-        if(h != 0f) {
-            transform.RotateAround(player.transform.position, Vector3.up, h);
-        }
+        float v = 0f;
+        float xRotationLimit = Mathf.Abs(Mathf.Acos(Vector3.Dot(transform.up, Vector3.up))) % (Mathf.PI / 2);
+        if(Input.GetKey(KeyCode.D)) h = -speed * Time.deltaTime;
+        if(Input.GetKey(KeyCode.A)) h = speed * Time.deltaTime;
+        if(Input.GetKey(KeyCode.W) && xRotationLimit < Mathf.PI / 3) v = speed * Time.deltaTime;
+        if(Input.GetKey(KeyCode.S) && xRotationLimit > 0.1f) v = -speed * Time.deltaTime;
+        if(h != 0f) transform.RotateAround(player.transform.position, Vector3.up, h);
+        if(v != 0f) transform.RotateAround(player.transform.position, transform.right, v);
     }
 
-    // Returns the vector between the player and camera transforms
+    // Returns the vector between the player and camera positions
     Vector3 GetOffset() {
         return transform.position - player.transform.position;
     }
