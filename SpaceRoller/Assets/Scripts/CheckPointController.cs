@@ -6,10 +6,14 @@ using UnityEngine;
 
 public class CheckPointController : MonoBehaviour {
 
+    public AudioClip checkpointSound;
+
     // When the player collides with the checkpoint, change the spawn location
 	void OnTriggerEnter(Collider other) {
         if(other.tag == "Player") {
-            GameManager.SetSpawnLocation(transform.position);
+            Vector3 location = transform.position + Vector3.up;
+            GameManager.SetSpawnLocation(location);
+            AudioSource.PlayClipAtPoint(checkpointSound, location);
         }
     }
 }

@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour {
 
     static GameManager instance;
 
-    bool isPlayerDead;
-    bool paused;
+    bool isLevelOver;
+    bool acceptPlayerInput;
     int currentScene;
     Vector3 spawnLocation;
     Vector3[] oldPlayerMovement;
@@ -38,13 +38,14 @@ public class GameManager : MonoBehaviour {
         InitLevel();
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = 0;
-        paused = false;
-        isPlayerDead = false;
+        acceptPlayerInput = true;
+        isLevelOver = false;
     }
 
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Escape)) {
-            if(!paused) Pause();
+        int curSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if(Input.GetKeyDown(KeyCode.Escape) && !isLevelOver && curSceneIndex != 0) {
+            if(acceptPlayerInput) Pause();
             else UnPause();
         }
     }
@@ -56,7 +57,8 @@ public class GameManager : MonoBehaviour {
 
     // Initializes the level
     void InitLevel() {
-        instance.isPlayerDead = false;
+        instance.isLevelOver = false;
+        acceptPlayerInput = true;
         player = FindPlayer();
         if(player != null) InitCamera(player, cameraSpeed);
     }
@@ -77,7 +79,7 @@ public class GameManager : MonoBehaviour {
     // Pauses the game
     public void Pause() {
         Time.timeScale = 0;
-        paused = true;
+        acceptPlayerInput = false;
         oldPlayerMovement = StopPlayerMovement();
         CreatePopUp("pause");
     }
@@ -85,22 +87,30 @@ public class GameManager : MonoBehaviour {
     // Unpauses the game
     public void UnPause() {
         Time.timeScale = 1;
-        paused = false;
+        acceptPlayerInput = true;
         RestartPlayerMovement(oldPlayerMovement);
         Destroy(curPausePopUp);
     }
 
     // Returns whether or not the game is paused
-    public static bool IsGamePaused() {
-        return instance.paused;
+    public static bool IsPlayerInputAccepted() {
+        return instance.acceptPlayerInput;
     }
 
     // Ends the game when the player dies
     public static void OnPlayerDeath() {
-        if(!instance.isPlayerDead) {
-            instance.isPlayerDead = true;
+        if(!instance.isLevelOver) {
+            instance.isLevelOver = true;
             instance.CreatePopUp("death");
         }
+    }
+
+    // Shows the win pop up
+    public static void OnPlayerVictory() {
+        instance.acceptPlayerInput = false;
+        instance.isLevelOver = true;
+        instance.StopPlayerMovement();
+        instance.CreatePopUp("win");
     }
 
     // Moves on to the next level
@@ -120,7 +130,7 @@ public class GameManager : MonoBehaviour {
         instance.StopPlayerMovement();
         instance.player.transform.position = instance.spawnLocation;
         instance.cameraController.ResetCamera();
-        instance.isPlayerDead = false;
+        instance.isLevelOver = false;
     }
 
     // Quits the game

@@ -57,4 +57,5 @@ Schedule of Work:
         10/20/2016 - Revamped the GameManager to actually work during level transitions, 
                         fixed the camera so it resets when retrying a level, created
                         PopUpController to add functionality to buttons on pop-ups, implemented
-                        pausing with the escape button, created pop-up prefabs
+                        pausing with the escape button, created pop-up prefabs, created goal
+                        prefab and functionality, updated checkpoint prefab
