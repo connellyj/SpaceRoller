@@ -1,5 +1,4 @@
-﻿/*
- * A script used to create arbitrary paths easily for game objects
+﻿/* A script used to create arbitrary paths easily for game objects
  */
 
 using UnityEngine;
@@ -10,17 +9,15 @@ public class Path : MonoBehaviour {
     public string[] path;
     public bool reverse;
     public float speed;
-    
-    string[,] movementMap;
 
     void Start() {
-        movementMap = ParseMovementMap(path);
-        StartCoroutine(AnimateObject());
+        string[,] movementMap = ParseMovementMap(path);
+        StartCoroutine(AnimateObject(movementMap));
     }
 
     // Parses the inputted movement
     string[,] ParseMovementMap(string[] pathToParse) {
-        string [,] map = new string[2, pathToParse.Length];
+        string[,] map = new string[2, pathToParse.Length];
         for(int i = 0; i < pathToParse.Length; i++) {
             string[] parsedString = pathToParse[i].Split(' ');
             map[0, i] = parsedString[0];
@@ -29,15 +26,8 @@ public class Path : MonoBehaviour {
         return map;
     }
 
-    // Gets the number of grids the object should move for the given part of the path
-    float GetGridCount(int pathIndex) {
-        float count;
-        float.TryParse(movementMap[1, pathIndex], out count);
-        return count;
-    }
-
     // Gets the direction the object should move for the given part of the path
-    Vector3 GetObjectDirection(int pathIndex, bool inReverse) {
+    Vector3 GetObjectDirection(int pathIndex, bool inReverse, string[,] movementMap) {
         int reversed;
         if(inReverse) reversed = -1;
         else reversed = 1;
@@ -60,34 +50,30 @@ public class Path : MonoBehaviour {
         }
     }
     
-    IEnumerator AnimateObject() {
+    // Moves the object based on the given map
+    IEnumerator AnimateObject(string[,] movementMap) {
         int pathIndex = 0;
         float gridCount = 0;
         bool inReverse = false;
         Vector3 direction = Vector3.zero;
         while(true) {
             if(gridCount == 0 && path.Length != 0) {
-                gridCount = GetGridCount(pathIndex);
-                direction = GetObjectDirection(pathIndex, inReverse);
+                float.TryParse(movementMap[1, pathIndex], out gridCount);
+                direction = GetObjectDirection(pathIndex, inReverse, movementMap);
 
                 // Updates the index
-                if(!inReverse) {
-                    pathIndex++;
-                } else {
-                    if(pathIndex == 0) {
-                        inReverse = false;
-                    } else {
-                        pathIndex--;
-                    }
-                }
-                if(pathIndex == path.Length) {
-                    if(reverse) {
+                if(reverse) {
+                    if(pathIndex == path.Length - 1 && !inReverse) {
                         inReverse = true;
-                        pathIndex--;
+                    } else if(pathIndex == 0 && inReverse) {
+                        inReverse = false;
+                    } else if(inReverse) {
+                        pathIndex = (path.Length + pathIndex - 1) % path.Length;
                     } else {
-                        pathIndex = 0;
+                        pathIndex = (pathIndex + 1) % path.Length;
                     }
                 }
+                else pathIndex = (pathIndex + 1) % path.Length;
             }
 
             // Moves the object

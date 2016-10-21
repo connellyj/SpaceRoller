@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/* Controls the asteroid's spin and interaction
+*/
+
+using UnityEngine;
 
 public class AsteroidController : MonoBehaviour {
 

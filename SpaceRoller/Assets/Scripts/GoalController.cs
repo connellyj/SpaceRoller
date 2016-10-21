@@ -1,5 +1,4 @@
-﻿/*
- * Controls the goal objects
+﻿/* Controls the goal objects
  */
 
 using UnityEngine;

@@ -59,3 +59,4 @@ Schedule of Work:
                         PopUpController to add functionality to buttons on pop-ups, implemented
                         pausing with the escape button, created pop-up prefabs, created goal
                         prefab and functionality, updated checkpoint prefab
+        10/21/2016 - Refactored

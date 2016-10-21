@@ -1,5 +1,4 @@
-﻿/*
- * Controls the camera based on user input
+﻿/* Controls the camera based on user input
  */
 
 using UnityEngine;
@@ -19,7 +18,7 @@ public class CameraController : MonoBehaviour {
         if(cameraInitialized) {
             UpdateCameraPosition();
             UpdateCameraRotation();
-            offset = GetOffset();
+            UpdateOffset();
         }
     }
 
@@ -40,7 +39,7 @@ public class CameraController : MonoBehaviour {
         cameraInitialized = false;
         transform.position = initialCameraPosition;
         transform.localRotation = initialCameraRotation;
-        offset = GetOffset();
+        UpdateOffset();
         cameraInitialized = true;
     }
 
@@ -59,16 +58,20 @@ public class CameraController : MonoBehaviour {
         float h = 0f;
         float v = 0f;
         float xRotationLimit = Mathf.Abs(Mathf.Acos(Vector3.Dot(transform.up, Vector3.up))) % (Mathf.PI / 2);
+
+        // Gets the input
         if(Input.GetKey(KeyCode.D)) h = -speed * Time.deltaTime;
         if(Input.GetKey(KeyCode.A)) h = speed * Time.deltaTime;
         if(Input.GetKey(KeyCode.W) && xRotationLimit < Mathf.PI / 3) v = speed * Time.deltaTime;
         if(Input.GetKey(KeyCode.S) && xRotationLimit > 0.1f) v = -speed * Time.deltaTime;
+
+        // Rotates the camera
         if(h != 0f) transform.RotateAround(player.transform.position, Vector3.up, h);
         if(v != 0f) transform.RotateAround(player.transform.position, transform.right, v);
     }
 
     // Returns the vector between the player and camera positions
-    Vector3 GetOffset() {
-        return transform.position - player.transform.position;
+    void UpdateOffset() {
+        offset = transform.position - player.transform.position;
     }
 }

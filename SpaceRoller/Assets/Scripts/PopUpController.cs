@@ -1,5 +1,5 @@
-﻿/*
- * Adds functionality to buttons on pop up menus
+﻿/* Adds functionality to buttons on pop up menus
+ * Meant to be attached to the parent of the buttons
  */ 
 
 using UnityEngine;

@@ -1,5 +1,4 @@
-﻿/*
- * Controls the game state
+﻿/* Controls the game state and handles UI events
  */
 
 using UnityEngine;
@@ -13,15 +12,14 @@ public class GameManager : MonoBehaviour {
     public GameObject winPopUp;
 
     static GameManager instance;
-
-    bool isLevelOver;
-    bool acceptPlayerInput;
+    
+    bool paused;
     int currentScene;
     Vector3 spawnLocation;
     Vector3[] oldPlayerMovement;
     GameObject player;
     CameraController cameraController;
-    GameObject curPausePopUp;
+    GameObject currentPopUp;
 
     void Awake() {
         // Makes sure there is only one GameManager in each scene
@@ -35,18 +33,16 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        InitLevel();
+        /*ONLY NEEDED FOR TESTING PURPOSES ==>>*/ InitLevel();
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = 0;
-        acceptPlayerInput = true;
-        isLevelOver = false;
+        paused = false;
     }
 
     void Update() {
-        int curSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        if(Input.GetKeyDown(KeyCode.Escape) && !isLevelOver && curSceneIndex != 0) {
-            if(acceptPlayerInput) Pause();
-            else UnPause();
+        if(Input.GetKeyDown(KeyCode.Escape) /*SHOULD BE ADDED IN also last scene && currentScene != 0*/) {
+            if(!paused && currentPopUp == null) Pause();
+            else if(paused) UnPause();
         }
     }
 
@@ -57,63 +53,56 @@ public class GameManager : MonoBehaviour {
 
     // Initializes the level
     void InitLevel() {
-        instance.isLevelOver = false;
-        acceptPlayerInput = true;
-        player = FindPlayer();
-        if(player != null) InitCamera(player, cameraSpeed);
+        FindPlayer();
+        InitCamera(player, cameraSpeed);
     }
 
     // Sets up the camera
     void InitCamera(GameObject thePlayer, float speed) {
-        cameraController = Camera.main.gameObject.AddComponent<CameraController>();
-        cameraController.InitCamera(thePlayer, speed);
+        if(player != null) {
+            cameraController = Camera.main.gameObject.AddComponent<CameraController>();
+            cameraController.InitCamera(thePlayer, speed);
+        }
     }
 
     // Finds the player object and sets the spawn location to its position
-    GameObject FindPlayer() {
-        GameObject thePlayer = GameObject.FindGameObjectWithTag("Player");
-        if(thePlayer != null) SetSpawnLocation(thePlayer.transform.position);
-        return thePlayer;
+    void FindPlayer() {
+        player = GameObject.FindGameObjectWithTag("Player");
+        if(player != null) SetSpawnLocation(player.transform.position);
     }
 
     // Pauses the game
     public void Pause() {
+        paused = true;
         StopAllMovement();
-        curPausePopUp = CreatePopUp("pause");
+        CreatePopUp("pause");
     }
 
     // Unpauses the game
     public void UnPause() {
-        acceptPlayerInput = true;
-        RestartPlayerMovement(oldPlayerMovement);
-        Time.timeScale = 1;
-        Destroy(curPausePopUp);
+        paused = false;
+        RestartAllMovement();
+        Destroy(currentPopUp);
     }
 
+    // Stops the movement of everything in the scene
     void StopAllMovement() {
-        acceptPlayerInput = false;
-        oldPlayerMovement = StopPlayerMovement();
         Time.timeScale = 0;
     }
 
-    // Returns whether or not the game is paused
-    public static bool IsPlayerInputAccepted() {
-        return instance.acceptPlayerInput;
+    // Starts the movement of everything in the scene
+    void RestartAllMovement() {
+        Time.timeScale = 1;
     }
 
     // Ends the game when the player dies
     public static void OnPlayerDeath(bool stopMovement) {
-        if(!instance.isLevelOver) {
-            if(stopMovement) instance.StopAllMovement();
-            instance.isLevelOver = true;
-            instance.CreatePopUp("death");
-        }
+        if(stopMovement) instance.StopAllMovement();
+        instance.CreatePopUp("death");
     }
 
     // Shows the win pop up
     public static void OnPlayerVictory() {
-        instance.acceptPlayerInput = false;
-        instance.isLevelOver = true;
         instance.StopPlayerMovement();
         instance.CreatePopUp("win");
     }
@@ -135,7 +124,6 @@ public class GameManager : MonoBehaviour {
         instance.StopPlayerMovement();
         instance.player.transform.position = instance.spawnLocation;
         instance.cameraController.ResetCamera();
-        instance.isLevelOver = false;
     }
 
     // Quits the game
@@ -161,35 +149,27 @@ public class GameManager : MonoBehaviour {
     }
 
     // Stops the players movement
-    Vector3[] StopPlayerMovement() {
-        Vector3[] oldSpeed = new Vector3[2];
+    void StopPlayerMovement() {
         Rigidbody rb = instance.player.GetComponent<Rigidbody>();
-        oldSpeed[0] = rb.velocity;
         rb.velocity = Vector3.zero;
-        oldSpeed[1] = rb.angularVelocity;
         rb.angularVelocity = Vector3.zero;
-        return oldSpeed;
-    }
-
-    // Gives the player the given velocity
-    void RestartPlayerMovement(Vector3[] movement) {
-        Rigidbody rb = player.GetComponent<Rigidbody>();
-        rb.velocity = movement[0];
-        rb.angularVelocity = movement[1];
     }
 
     // Creates the given UI pop-up
-    GameObject CreatePopUp(string type) {
+    void CreatePopUp(string type) {
         switch(type) {
             case "death":
-                return Instantiate(deathPopUp);
+                currentPopUp = Instantiate(deathPopUp);
+                break;
             case "pause":
-                return Instantiate(pausePopUp);
+                currentPopUp = Instantiate(pausePopUp);
+                break;
             case "win":
-                return Instantiate(winPopUp);
+                currentPopUp = Instantiate(winPopUp);
+                break;
             default:
                 Debug.Log("That type of PopUp does not exist");
-                return null;
+                break;
         }
     }
 }

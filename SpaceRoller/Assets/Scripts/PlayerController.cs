@@ -1,5 +1,4 @@
-/*
- * Controls the player
+/* Handles player movement
  */
 
 using UnityEngine;
@@ -7,12 +6,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float speed;
+    public float maxVelocity;
     public float deathHeight;
 
     Rigidbody rb;
+    bool dead;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
+        dead = false;
     }
 
     void Update() {
@@ -20,16 +22,18 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if(GameManager.IsPlayerInputAccepted()) Move();
+        Move();
     }
 
     // If the player is low enough, ends the game
     void CheckIfPlayerDied() {
-        if(transform.position.y < deathHeight) {
+        if(transform.position.y < deathHeight && !dead) {
             GameManager.OnPlayerDeath(false);
+            dead = true;
         }
     }
 
+    // Moves the player based on input
     void Move() {
         // Gets the camera's front and right vectors parallel to the xz-plane
         Vector3 cameraRight = Camera.main.transform.right;
@@ -41,8 +45,7 @@ public class PlayerController : MonoBehaviour {
         Vector3 movement = moveVertical + moveHorizontal;
 
         // Moves the player
-
-        rb.AddForce(movement * speed);
+        if(rb.velocity.magnitude < maxVelocity) rb.AddForce(movement * speed);
     }
 
 }

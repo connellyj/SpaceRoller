@@ -1,5 +1,5 @@
-﻿/*
- * Adds functionality to the buttons on the start screen
+﻿/* Adds functionality to the buttons on the start screen
+ * Meant to be attached to the parent of the buttons
  */ 
 
 using UnityEngine;

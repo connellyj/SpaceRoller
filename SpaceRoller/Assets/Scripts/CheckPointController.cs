@@ -1,5 +1,4 @@
-﻿/*
- * Controls the checkpoint objects
+﻿/* Controls the checkpoint objects
  */ 
 
 using UnityEngine;
