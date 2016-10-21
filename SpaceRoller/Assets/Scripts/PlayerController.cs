@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
     // If the player is low enough, ends the game
     void CheckIfPlayerDied() {
         if(transform.position.y < deathHeight) {
-            GameManager.OnPlayerDeath();
+            GameManager.OnPlayerDeath(false);
         }
     }
 

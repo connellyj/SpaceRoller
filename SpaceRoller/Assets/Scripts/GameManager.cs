@@ -78,18 +78,22 @@ public class GameManager : MonoBehaviour {
 
     // Pauses the game
     public void Pause() {
-        Time.timeScale = 0;
-        acceptPlayerInput = false;
-        oldPlayerMovement = StopPlayerMovement();
-        CreatePopUp("pause");
+        StopAllMovement();
+        curPausePopUp = CreatePopUp("pause");
     }
 
     // Unpauses the game
     public void UnPause() {
-        Time.timeScale = 1;
         acceptPlayerInput = true;
         RestartPlayerMovement(oldPlayerMovement);
+        Time.timeScale = 1;
         Destroy(curPausePopUp);
+    }
+
+    void StopAllMovement() {
+        acceptPlayerInput = false;
+        oldPlayerMovement = StopPlayerMovement();
+        Time.timeScale = 0;
     }
 
     // Returns whether or not the game is paused
@@ -98,8 +102,9 @@ public class GameManager : MonoBehaviour {
     }
 
     // Ends the game when the player dies
-    public static void OnPlayerDeath() {
+    public static void OnPlayerDeath(bool stopMovement) {
         if(!instance.isLevelOver) {
+            if(stopMovement) instance.StopAllMovement();
             instance.isLevelOver = true;
             instance.CreatePopUp("death");
         }
@@ -174,20 +179,17 @@ public class GameManager : MonoBehaviour {
     }
 
     // Creates the given UI pop-up
-    void CreatePopUp(string type) {
+    GameObject CreatePopUp(string type) {
         switch(type) {
             case "death":
-                Instantiate(deathPopUp);
-                break;
+                return Instantiate(deathPopUp);
             case "pause":
-                curPausePopUp = Instantiate(pausePopUp);
-                break;
+                return Instantiate(pausePopUp);
             case "win":
-                Instantiate(winPopUp);
-                break;
+                return Instantiate(winPopUp);
             default:
                 Debug.Log("That type of PopUp does not exist");
-                break;
+                return null;
         }
     }
 }
