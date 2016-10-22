@@ -60,3 +60,4 @@ Schedule of Work:
                         pausing with the escape button, created pop-up prefabs, created goal
                         prefab and functionality, updated checkpoint prefab
         10/21/2016 - Refactored
+        10/22/2016 - Fixed some camera and player bugs, refactored

@@ -12,13 +12,13 @@ public class GameManager : MonoBehaviour {
     public GameObject winPopUp;
 
     static GameManager instance;
-    
+
+    bool useSpawnLocation;
     bool paused;
+    bool acceptPlayerInput;
     int currentScene;
     Vector3 spawnLocation;
-    Vector3[] oldPlayerMovement;
     GameObject player;
-    CameraController cameraController;
     GameObject currentPopUp;
 
     void Awake() {
@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour {
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = 0;
         paused = false;
+        useSpawnLocation = false;
+        acceptPlayerInput = true;
     }
 
     void Update() {
@@ -53,22 +55,31 @@ public class GameManager : MonoBehaviour {
 
     // Initializes the level
     void InitLevel() {
+        if(paused) UnPause();
         FindPlayer();
         InitCamera(player, cameraSpeed);
+        acceptPlayerInput = true;
     }
 
     // Sets up the camera
     void InitCamera(GameObject thePlayer, float speed) {
         if(player != null) {
-            cameraController = Camera.main.gameObject.AddComponent<CameraController>();
+            CameraController cameraController = Camera.main.gameObject.AddComponent<CameraController>();
             cameraController.InitCamera(thePlayer, speed);
         }
     }
 
-    // Finds the player object and sets the spawn location to its position
+    // Finds the player object and moves it to the correct position
     void FindPlayer() {
         player = GameObject.FindGameObjectWithTag("Player");
-        if(player != null) SetSpawnLocation(player.transform.position);
+        if(player != null) {
+            if(useSpawnLocation) {
+                player.transform.position = spawnLocation;
+                useSpawnLocation = false;
+            }else {
+                SetSpawnLocation(player.transform.position);
+            }
+        }
     }
 
     // Pauses the game
@@ -98,12 +109,14 @@ public class GameManager : MonoBehaviour {
     // Ends the game when the player dies
     public static void OnPlayerDeath(bool stopMovement) {
         if(stopMovement) instance.StopAllMovement();
+        instance.acceptPlayerInput = false;
         instance.CreatePopUp("death");
     }
 
     // Shows the win pop up
     public static void OnPlayerVictory() {
         instance.StopPlayerMovement();
+        instance.acceptPlayerInput = false;
         instance.CreatePopUp("win");
     }
 
@@ -121,9 +134,8 @@ public class GameManager : MonoBehaviour {
 
     // Restarts the current level
     public static void RetryLevel() {
-        instance.StopPlayerMovement();
-        instance.player.transform.position = instance.spawnLocation;
-        instance.cameraController.ResetCamera();
+        instance.useSpawnLocation = true;
+        SceneManager.LoadScene(instance.currentScene);
     }
 
     // Quits the game
@@ -145,7 +157,11 @@ public class GameManager : MonoBehaviour {
     // Sets the location the player should respawn at
     public static void SetSpawnLocation(Vector3 newLocation) {
         instance.spawnLocation = newLocation;
-        if(instance.cameraController != null) instance.cameraController.SetInitialPosition(newLocation);
+    }
+
+    // Returns whether or not player input should be accepted
+    public static bool isAcceptingPlayerInput() {
+        return instance.acceptPlayerInput;
     }
 
     // Stops the players movement

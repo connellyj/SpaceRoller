@@ -26,26 +26,8 @@ public class CameraController : MonoBehaviour {
     public void InitCamera(GameObject thePlayer, float speed) {
         this.speed = speed;
         player = thePlayer;
-
-        initialCameraPosition = transform.position;
-        initialCameraRotation = transform.localRotation;
         offset = initialOffset;
-
         cameraInitialized = true;
-    }
-
-    // Changes the position of the camera to the starting position
-    public void ResetCamera() {
-        cameraInitialized = false;
-        transform.position = initialCameraPosition;
-        transform.localRotation = initialCameraRotation;
-        UpdateOffset();
-        cameraInitialized = true;
-    }
-
-    // Changes the starting position of the camera (for checkpoints)
-    public void SetInitialPosition(Vector3 newPosition) {
-        initialCameraPosition = newPosition + initialOffset;
     }
 
     // Moves the camera with the player
