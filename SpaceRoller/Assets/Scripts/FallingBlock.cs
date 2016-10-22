@@ -10,11 +10,13 @@ public class FallingBlock : MonoBehaviour {
 	
 	private bool fallTriggered = false;
 	private float framesPerSecond = 30;
-	private Vector3 origin;
+	private Vector3 startingPosition;
+	private Quaternion startingRotation;
 
 	void Start() 
 	{
-		origin = transform.position;
+		startingPosition = transform.position;
+		startingRotation = transform.rotation;
 	}
 
 	void OnCollisionEnter(Collision other)
@@ -51,7 +53,8 @@ public class FallingBlock : MonoBehaviour {
         }
 
         // return to original position
-		transform.position = origin;
+		transform.position = startingPosition;
+		transform.rotation = startingRotation;
 		fallTriggered = false;
 	}
 }

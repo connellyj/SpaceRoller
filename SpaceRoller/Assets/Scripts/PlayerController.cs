@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour {
     void Move() {
         // Gets the camera's front and right vectors parallel to the xz-plane
         Vector3 cameraRight = Camera.main.transform.right;
-        Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z);
+        Vector3 cameraForward = new Vector3(Camera.main.transform.forward.x, 0, Camera.main.transform.forward.z).normalized;
 
         // Calculates the movement vector
         Vector3 moveHorizontal = Input.GetAxis("Horizontal") * cameraRight;
