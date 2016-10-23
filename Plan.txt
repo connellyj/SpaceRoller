@@ -61,3 +61,4 @@ Schedule of Work:
                         prefab and functionality, updated checkpoint prefab
         10/21/2016 - Refactored
         10/22/2016 - Fixed some camera and player bugs, refactored
+        10/23/2016 - Worked on the different write ups and some level design
