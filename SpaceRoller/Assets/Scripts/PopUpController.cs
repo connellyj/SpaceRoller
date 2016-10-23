@@ -13,19 +13,19 @@ public class PopUpController : MonoBehaviour {
                 case "RetryButton":
                     child.gameObject.GetComponent<Button>().onClick.AddListener(() => {
                         GameManager.RetryLevel();
-                        Destroy(transform.parent.gameObject);
+                        if(transform.parent != null) Destroy(transform.parent.gameObject);
                     });
                     break;
                 case "MainMenuButton":
                     child.gameObject.GetComponent<Button>().onClick.AddListener(() => {
                         GameManager.GoToMainMenu();
-                        Destroy(transform.parent.gameObject);
+                        if(transform.parent != null) Destroy(transform.parent.gameObject);
                     });
                     break;
                 case "NextLevelButton":
                     child.gameObject.GetComponent<Button>().onClick.AddListener(() => {
                         GameManager.ProceedToNextLevel();
-                        Destroy(transform.parent.gameObject);
+                        if(transform.parent != null) Destroy(transform.parent.gameObject);
                     });
                     break;
                 default:
