@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour {
     // Initializes the level
     void InitLevel() {
         if(paused) UnPause();
+        else RestartAllMovement();
         FindPlayer();
         InitCamera(player, cameraSpeed);
         acceptPlayerInput = true;
