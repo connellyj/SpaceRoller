@@ -12,9 +12,17 @@ public class BlackHole : MonoBehaviour {
         {
             Vector3 distance = transform.position - other.transform.position; 
             Vector3 direction = distance.normalized;
-            float magnitude = strength / (float)Math.Pow(distance.magnitude,2.0);
+            float magnitude = strength / distance.magnitude;
             Rigidbody rb = other.GetComponent<Rigidbody>();
             rb.AddForce(direction * magnitude);
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+    	if (other.gameObject.tag == "Player")
+        {
+        	GameManager.OnPlayerDeath(true);
         }
     }
 

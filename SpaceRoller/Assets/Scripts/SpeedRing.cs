@@ -28,5 +28,4 @@ public class SpeedRing : MonoBehaviour {
             rb.AddForce(direction * strength);
 		}
 	}
-
 }
