@@ -16,6 +16,9 @@ public class StartScreenController : MonoBehaviour {
                 case "RestartButton":
                     child.gameObject.GetComponent<Button>().onClick.AddListener(() => GameManager.RestartGame());
                     break;
+                case "QuitButton":
+                    child.gameObject.GetComponent<Button>().onClick.AddListener(() => GameManager.QuitGame());
+                    break;
                 default:
                     break;
             }
