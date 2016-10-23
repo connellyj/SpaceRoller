@@ -5,6 +5,7 @@ public class SpeedRing : MonoBehaviour {
 
 	public float strength;
 	public Vector3 normal;
+	public bool oneWay = false;
 
 	void Start()
 	{
@@ -18,7 +19,7 @@ public class SpeedRing : MonoBehaviour {
 		{
 			Vector3 distance = transform.position - other.gameObject.transform.position;
 			Vector3 direction = normal;
-			if (Vector3.Dot(distance, normal) < 0)
+			if ((Vector3.Dot(distance, normal) < 0) && !oneWay)
 			{
 				direction *= -1;
 			}
