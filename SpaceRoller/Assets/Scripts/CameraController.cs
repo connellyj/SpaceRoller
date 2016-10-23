@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    readonly Vector3 initialOffset = new Vector3(0, 7, -8);
+    static readonly Vector3 initialOffset = new Vector3(0, 5.3f, -10.8f);
+    static readonly Quaternion rotationOffset = Quaternion.Euler(27.6f, 0, 0);
 
     float speed;
     bool cameraInitialized = false;
@@ -27,6 +28,7 @@ public class CameraController : MonoBehaviour {
         this.speed = speed;
         player = thePlayer;
         offset = initialOffset;
+        transform.rotation = rotationOffset;
         cameraInitialized = true;
     }
 
