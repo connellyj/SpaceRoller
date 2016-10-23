@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        /*ONLY NEEDED FOR TESTING PURPOSES ==>>*/ InitLevel();
+        InitLevel();
         SceneManager.sceneLoaded += OnSceneLoaded;
         currentScene = SceneManager.GetActiveScene().buildIndex;
         paused = false;
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Escape) /*SHOULD BE ADDED IN also last scene && currentScene != 0*/) {
+        if(Input.GetKeyDown(KeyCode.Escape) && currentScene != 0) {
             if(!paused && currentPopUp == null) Pause();
             else if(paused) UnPause();
         }
