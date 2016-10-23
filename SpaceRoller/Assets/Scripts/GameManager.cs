@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
     void Start() {
         /*ONLY NEEDED FOR TESTING PURPOSES ==>>*/ InitLevel();
         SceneManager.sceneLoaded += OnSceneLoaded;
-        currentScene = 0;
+        currentScene = SceneManager.GetActiveScene().buildIndex;
         paused = false;
         useSpawnLocation = false;
         acceptPlayerInput = true;

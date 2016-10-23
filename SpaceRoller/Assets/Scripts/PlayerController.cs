@@ -10,9 +10,12 @@ public class PlayerController : MonoBehaviour {
     public float deathHeight;
 
     Rigidbody rb;
+    GameObject emptyTemp;
     bool dead;
 
     void Start() {
+        emptyTemp = new GameObject();
+        emptyTemp.name = "PlayerParent";
         rb = GetComponent<Rigidbody>();
         dead = false;
     }
@@ -23,6 +26,27 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate() {
         if(GameManager.isAcceptingPlayerInput()) Move();
+    }
+
+    void OnCollisionEnter(Collision other) {
+        BindTransform(other.gameObject);
+    }
+
+    void OnCollisionExit(Collision other) {
+        UnbindTransform(other.gameObject);
+    }
+
+    void BindTransform(GameObject other) {
+        if(other.gameObject.tag == "MovingPlatform") {
+            emptyTemp.transform.parent = other.transform;
+            transform.parent = emptyTemp.transform;
+        }
+    }
+
+    void UnbindTransform(GameObject other) {
+        if(other.tag == "MovingPlatform") {
+            transform.parent = null;
+        }
     }
 
     // If the player is low enough, ends the game

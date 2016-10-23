@@ -28,6 +28,7 @@ public class CameraController : MonoBehaviour {
         this.speed = speed;
         player = thePlayer;
         offset = initialOffset;
+        UpdateCameraPosition();
         transform.rotation = rotationOffset;
         cameraInitialized = true;
     }
